@@ -70,10 +70,10 @@ def get_convert_command(input_file, output_file):
 
 ####
 codec = 'fdk_aac_he1'  # List of bitrates to use ['fdk_aac_he1']
-bitrate_list = [16]
-org_dir = "/home/woongjib/Projects/Dataset_Crop/GT"
-save_compressed_basedir = "/home/woongjib/Projects/Dataset_Crop/SBR_16"
-save_wav_basedir = "/home/woongjib/Projects/Dataset_Crop/SBR_16"
+bitrate_list = [20]
+org_dir = "/home/woongjib/Projects/USAC44_mono_48k"
+save_compressed_basedir = "/home/woongjib/Projects/USAC44_20kbps"
+save_wav_basedir = "/home/woongjib/Projects/USAC44_TEMP"
 process_files(org_dir, save_compressed_basedir, save_wav_basedir, codec, bitrate_list)
 
 """

@@ -45,7 +45,7 @@ def process_audio(input_file, output_file, cutoff_freq, sr):
     filtered_audio = apply_lowpass_filter(audio, sr, cutoff_freq)
     
     # Save the processed audio    
-    ta.save(output_file, filtered_audio.unsqueeze(0), sr)
+    ta.save(output_file, filtered_audio.unsqueeze(0), sr, bits_per_sample=16)
     print(f"Processed {input_file} and saved to \n {output_file}")
 
 def process_folder(input_dir, output_dir, cutoff_freq, sr):
@@ -100,5 +100,6 @@ if __name__ == "__main__":
 """
 Terminal
 python preprocess_lpf.py /home/woongjib/Projects/Dataset_Crop/Splits/GT /home/woongjib/Projects/Dataset_Crop/Splits/GT_LPF_4640 --sr 48000 --cutoff 4640;
+python preprocess_lpf.py /home/woongjib/Projects/Dataset_Crop/Splits/GT /home/woongjib/Projects/Dataset_Crop/Splits/GT_LPF_4265 --sr 48000 --cutoff 4265;
 
 """

@@ -24,7 +24,7 @@ orig_dir = os.getcwd()
 os.chdir("/home/woongjib/Projects/SBR/aac_analysis")
 
 # path
-gt_path = "/home/woongjib/Projects/Dataset_Crop/GT/FSD50K" 
+gt_path = "/home/woongjib/Projects/USAC44_GT" 
 # gt_path = "/home/woongjib/Projects/Dataset_Crop/GT/MUSDB18" 
 # gt_path = "/home/woongjib/Projects/Dataset_Crop/GT/VCTK" 
 gt_paths = get_audio_paths(gt_path)
@@ -37,13 +37,16 @@ Bug files cannot decode
 
 """
 
-bar = tqdm(gt_paths[:])
+bar = tqdm(gt_paths[1:])
 for gt_path in bar:
-    sbr_path = gt_path.replace("GT","SBRs/SBR_12").replace(".wav",".m4a")
-    core_path = gt_path.replace("GT","SBR_12_Core")
+    sbr_path = gt_path.replace("USAC44_GT","USAC44_12kbps").replace(".wav",".m4a")
+    core_path = gt_path.replace("USAC44_GT","USAC44_12core")
     
-    sbr_20_path = gt_path.replace("GT","SBRs/SBR_20").replace(".wav",".m4a")
-    core_20_path = gt_path.replace("GT","SBR_20_Core")
+    sbr_20_path = gt_path.replace("USAC44_GT","USAC44_20kbps").replace(".wav",".m4a")
+    core_20_path = gt_path.replace("USAC44_GT","USAC44_20_core")
+    
+    sbr_16_path = gt_path.replace("USAC44_GT","USAC44_16kbps").replace(".wav",".m4a")
+    core_16_path = gt_path.replace("USAC44_GT","USAC44_16_core")
     
     ## Core Extraction & Length Adjustment
     outdict = profile_decoding_output(sbr_path)
@@ -52,6 +55,9 @@ for gt_path in bar:
     outdict_20 = profile_decoding_output(sbr_20_path)
     core_20 = outdict_20['core'] / 32768
     
+    outdict_16 = profile_decoding_output(sbr_16_path)
+    core_16 = outdict_16['core'] / 32768
+       
     gt,_ = librosa.load(gt_path, sr=None)
     # sbr,_ = librosa.load(sbr_path, sr=None)    
     # sbr_20,_ = librosa.load(sbr_20_path, sr=None)
@@ -65,6 +71,7 @@ for gt_path in bar:
     # sbr_20 = sbr_20[128:128+len(gt)]
     core = core[:len(gt)]
     core_20 = core_20[:len(gt)]
+    core_16 = core_16[:len(gt)]
     assert gt.shape == core.shape == core_20.shape, f"Array lengths are not the same!:{gt_path}"    
     # print(gt.shape, core.shape, core_20.shape, end='\n')
     
@@ -81,10 +88,12 @@ for gt_path in bar:
     ## Makedirs
     os.makedirs(os.path.dirname(core_path), exist_ok=True)
     os.makedirs(os.path.dirname(core_20_path), exist_ok=True)
-    
+    os.makedirs(os.path.dirname(core_16_path), exist_ok=True)
+
     ## Save files
     soundfile.write(gt_path, gt, samplerate=48000)
     soundfile.write(core_path, core, samplerate=48000)
     soundfile.write(core_20_path, core_20, samplerate=48000) 
+    soundfile.write(core_16_path, core_16, samplerate=48000) 
 
 os.chdir(orig_dir)
